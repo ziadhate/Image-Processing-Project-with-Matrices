@@ -151,11 +151,16 @@ Image convertToGrayscale(const Image& input) {
     int width = input.getWidth();
     Image output(width, height, 1); // Single channel for grayscale
 
-    // TODO: Implement this function
-    // For each pixel:
-    //   Get R, G, B values from input image
-    //   Calculate gray = 0.299*R + 0.587*G + 0.114*B
-    //   Set output(y, x, 0) = gray
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int R = input(y, x, 0);
+            int G = input(y, x, 1);
+            int B = input(y, x, 2);
+
+            int gray = static_cast<int>(0.299 * R + 0.587 * G + 0.114 * B);
+            output(y, x, 0) = gray;
+        }
+    }
 
     return output;
 }
@@ -176,9 +181,13 @@ Image flipHorizontal(const Image& input) {
     int channels = input.getChannels();
     Image output(width, height, channels);
 
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   output(y, width-1-x, c) = input(y, x, c)
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                output(y, width - 1 - x, c) = input(y, x, c);
+            }
+        }
+    }
 
     return output;
 }
@@ -258,13 +267,13 @@ Image adjustContrast(const Image& input, float factor) {
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
-    for(int x=0;x<height;x++){
-        for(int y=0;y<width;y++){
-            for(int c=0;c<channels;c++){
-                 float original=input(y,x,c);
-                 float adjusted= factor * (original-128.0f)+128.0f;
-                 adjusted=max(0.0f,min(255.0f,adjusted));
-                 output(y,x,c)=adjusted;
+    for (int x = 0; x < height; x++) {
+        for (int y = 0; y < width; y++) {
+            for (int c = 0; c < channels; c++) {
+                float original = input(y, x, c);
+                float adjusted = factor * (original - 128.0f) + 128.0f;
+                adjusted = max(0.0f, min(255.0f, adjusted));
+                output(y, x, c) = adjusted;
             }
         }
     }
@@ -438,3 +447,4 @@ int main() {
     cout << "Use an image viewer that supports PPM format or convert them to PNG/JPG.\n";
 
     return 0;
+}
