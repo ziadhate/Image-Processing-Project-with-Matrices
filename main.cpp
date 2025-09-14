@@ -193,18 +193,24 @@ Image flipHorizontal(const Image& input) {
  *    - To position (height - 1 - y, x) in the output
  * 3. Return the flipped image
  */
+
 Image flipVertical(const Image& input) {
     int height = input.getHeight();
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
 
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   output(height-1-y, x, c) = input(y, x, c)
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                output(height - 1 - y, x, c) = input(y, x, c);
+            }
+        }
+    }
 
     return output;
 }
+
 
 /**
  * Adjusts image brightness
@@ -222,14 +228,19 @@ Image adjustBrightness(const Image& input, int value) {
     int channels = input.getChannels();
     Image output(width, height, channels);
 
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   new_value = input(y, x, c) + value
-    //   output(y, x, c) = max(0, min(255, new_value))
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                int new_value = input(y, x, c) + value;
+                // Clamp بين 0 و 255
+                new_value = max(0, min(255, new_value));
+                output(y, x, c) = new_value;
+            }
+        }
+    }
 
     return output;
 }
-
 /**
  * Adjusts image contrast
  *
