@@ -1,0 +1,4 @@
+﻿  mybranch.cpp
+C:\E\Fuzetek DAYS\project5mybranch\mybranch\mybranch\mybranch.cpp(273,32): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
+C:\E\Fuzetek DAYS\project5mybranch\mybranch\mybranch\mybranch.cpp(276,35): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  mybranch.vcxproj -> C:\E\Fuzetek DAYS\project5mybranch\mybranch\x64\Debug\mybranch.exe
