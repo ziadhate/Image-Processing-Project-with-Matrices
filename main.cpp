@@ -302,6 +302,27 @@ Image applyBlur(const Image& input) {
     int width = input.getWidth();
     int channels = input.getChannels();
     Image output(width, height, channels);
+    for (int y = 1; y < height - 1; y++) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int c = 0; c < channels; c++) {
+                int sum = 0; 
+                for (int ky = -1; ky <= 1; ky++) {
+                    for (int kx = -1; kx <= 1; kx++) {
+                        sum += input(y + ky, x + kx, c);
+
+                    }
+                
+                }
+
+                output(y, x, c) = sum / 9;
+
+            }
+
+
+        }
+    
+    
+    }
 
     // TODO: Implement this function
     // For each pixel (from y=1 to height-2, x=1 to width-2) and each channel:
@@ -323,18 +344,24 @@ Image applyBlur(const Image& input) {
  *    - To position (x, height - 1 - y) in the output
  * 3. Return the rotated image
  */
-Image rotate90(const Image& input) {
-    int height = input.getHeight();
-    int width = input.getWidth();
-    int channels = input.getChannels();
-    Image output(height, width, channels); // Width and height are swapped
+Image rotate90Clockwise(const Image& img) {
+    int w = img.getWidth();
+    int h = img.getHeight();
+    int ch = img.getChannels();
 
-    // TODO: Implement this function
-    // For each pixel and each channel:
-    //   output(x, height-1-y, c) = input(y, x, c)
+    Image rotated(h, w, ch);
 
-    return output;
+    for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+            for (int c = 0; c < ch; c++) {
+                rotated(x, w - 1 - y, c) = img(y, x, c);
+            }
+        }
+    }
+
+    return rotated;
 }
+
 
 // Creates a simple 4x4 test image with a pattern
 void createTestImage(const string& filename) {
@@ -365,8 +392,8 @@ void createTestImage(const string& filename) {
     img(3, 2, 0) = 255; img(3, 2, 1) = 255; img(3, 2, 2) = 128;  // Light Yellow
     img(3, 3, 0) = 0;   img(3, 3, 1) = 0;   img(3, 3, 2) = 0;    // Black
 
-    img.savePPM(filename);
-    cout << "Created 4x4 test image: " << filename << endl;
+    img.savePPM("outbut.ppm");
+    cout << "Created 4x4 test image:outbut.ppm " << endl;
 
     // Print the image data to console
     cout << "\nOriginal image data:\n";
@@ -374,6 +401,7 @@ void createTestImage(const string& filename) {
 }
 
 int main() {
+
     cout << "Image Processing with Matrices - Student Project\n";
     cout << "================================================\n\n";
 
@@ -435,7 +463,7 @@ int main() {
     blur.print();
     cout << endl;
 
-    Image rotated = rotate90(input);
+    Image rotated = rotate90Clockwise(input);
     rotated.savePPM("rotated90_image.ppm");
     cout << "- 90-degree rotation completed\n";
     cout << "Rotated image data:\n";
